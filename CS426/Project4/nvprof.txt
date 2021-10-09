@@ -1,0 +1,45 @@
+$ nvprof kmer-parallel data/reference_100000bp.txt data/reads_9216_100bp.txt 5 output.txt
+==16832== NVPROF is profiling process 16832, command: kmer-parallel data/reference_100000bp.txt data/reads_9216_100bp.txt 5 output.txt
+==16832== Profiling application: kmer-parallel data/reference_100000bp.txt data/reads_9216_100bp.txt 5 output.txt
+==16832== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   99.95%  4.76590s         1  4.76590s  4.76590s  4.76590s  kmerSearchAndExtend(char*, char*, Solution*, int, int, int)
+                    0.05%  2.4863ms         1  2.4863ms  2.4863ms  2.4863ms  [CUDA memcpy DtoH]
+                    0.00%  81.313us         2  40.656us  9.1530us  72.160us  [CUDA memcpy HtoD]
+      API calls:   95.28%  4.76602s         1  4.76602s  4.76602s  4.76602s  cudaDeviceSynchronize
+                    3.82%  191.23ms         3  63.742ms  5.0000us  191.06ms  cudaMalloc
+                    0.80%  40.007ms         1  40.007ms  40.007ms  40.007ms  cuDevicePrimaryCtxRelease
+                    0.07%  3.3688ms         3  1.1229ms  41.800us  2.7498ms  cudaMemcpy
+                    0.03%  1.3921ms         2  696.05us  21.100us  1.3710ms  cuModuleUnload
+                    0.00%  52.300us         1  52.300us  52.300us  52.300us  cudaLaunchKernel
+                    0.00%  22.400us         1  22.400us  22.400us  22.400us  cuDeviceTotalMem
+                    0.00%  19.200us       101     190ns     100ns  1.1000us  cuDeviceGetAttribute
+                    0.00%  11.500us         1  11.500us  11.500us  11.500us  cuDeviceGetPCIBusId
+                    0.00%  1.6000us         2     800ns     200ns  1.4000us  cuDeviceGet
+                    0.00%  1.4000us         3     466ns     300ns     600ns  cuDeviceGetCount
+                    0.00%  1.1000us         1  1.1000us  1.1000us  1.1000us  cuDeviceGetName
+                    0.00%     500ns         1     500ns     500ns     500ns  cuDeviceGetLuid
+                    0.00%     300ns         1     300ns     300ns     300ns  cuDeviceGetUuid
+
+$ nvprof kmer-parallel data/reference_100000bp.txt data/reads_1000.txt 5 output.txt
+==14276== NVPROF is profiling process 14276, command: kmer-parallel data/reference_100000bp.txt data/reads_1000.txt 5 output.txt
+==14276== Profiling application: kmer-parallel data/reference_100000bp.txt data/reads_1000.txt 5 output.txt
+==14276== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   99.98%  667.29ms         1  667.29ms  667.29ms  667.29ms  kmerSearchAndExtend(char*, char*, Solution*, int, int, int)
+                    0.01%  90.272us         1  90.272us  90.272us  90.272us  [CUDA memcpy DtoH]
+                    0.00%  17.823us         2  8.9110us  8.7360us  9.0870us  [CUDA memcpy HtoD]
+      API calls:   76.61%  667.35ms         1  667.35ms  667.35ms  667.35ms  cudaDeviceSynchronize
+                   18.71%  162.96ms         3  54.319ms  3.7000us  162.95ms  cudaMalloc
+                    4.59%  39.950ms         1  39.950ms  39.950ms  39.950ms  cuDevicePrimaryCtxRelease
+                    0.07%  610.90us         3  203.63us  40.400us  387.80us  cudaMemcpy
+                    0.01%  50.300us       101     498ns     400ns  1.8000us  cuDeviceGetAttribute
+                    0.01%  46.200us         1  46.200us  46.200us  46.200us  cudaLaunchKernel
+                    0.00%  40.200us         1  40.200us  40.200us  40.200us  cuDeviceTotalMem
+                    0.00%  28.900us         2  14.450us  3.5000us  25.400us  cuModuleUnload
+                    0.00%  11.400us         1  11.400us  11.400us  11.400us  cuDeviceGetPCIBusId
+                    0.00%  3.8000us         3  1.2660us     300ns  3.0000us  cuDeviceGetCount
+                    0.00%  3.7000us         2  1.8500us  1.1000us  2.6000us  cuDeviceGet
+                    0.00%  2.0000us         1  2.0000us  2.0000us  2.0000us  cuDeviceGetName
+                    0.00%     800ns         1     800ns     800ns     800ns  cuDeviceGetLuid
+                    0.00%     700ns         1     700ns     700ns     700ns  cuDeviceGetUuid
