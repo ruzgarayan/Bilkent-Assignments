@@ -1,0 +1,167 @@
+#Test program for spraying a rectangular or triangular field
+
+#Moves the given amount of distance in the current direction of the drone
+function move(Double distance) returns Boolean {
+	Integer preferred_speed = 5;
+	Double required_time = distance / preferred_speed;
+	
+	return move(required_time, preferred_speed);
+}
+
+#Moves the given amount of time and speed in the current direction of the drone
+function move(Double time, Integer speed) returns Boolean {
+	#Check if the given speed is acceptable
+	if (speed GT 10 OR speed LTEQ 0) then
+		return FALSE;
+	else
+		#Set horizontal speed
+		horizontalMove << speed;
+	endif
+	
+	wait << time;
+	horizontalMove << 0;
+	return TRUE;
+}
+
+#Changes the heading of the drone so that
+#It faces north when direction is 1
+#It faces east when direction is 2
+#It faces south when direction is 3
+#It faces west when direction is 4
+#No action if direction is something else
+function change_facing(Integer direction) {
+	Integer currHeading;
+	readHeading >> currHeading;
+
+	if (direction EQUALS 1) then #Make heading 0
+		turnLeft << currHeading;
+	elseif (direction EQUALS 2) then #Make heading 90
+		if (currHeading GT 90) then
+			turnLeft << currHeading - 90;
+		else
+			turnRight << 90 - currHeading;
+		endif
+		
+	elseif (direction EQUALS 3) then #Make heading 180
+		if (currHeading GT 180) then
+			turnLeft << currHeading - 180;
+		else
+			turnRight << 180 - currHeading;
+		endif
+	
+	elseif (direction EQUALS 4) then #Make heading 270
+		if (currHeading GT 270) then
+			turnLeft << currHeading - 270;
+		else
+			turnRight << 270 - currHeading;
+		endif
+	endif
+}
+
+function spray_rectangular_field(Integer width, Integer height) returns Boolean {
+	Integer i;
+	
+	for i from 1 to width do
+		change_facing(1); #Head north
+		sprayNozzle << TRUE;
+		Boolean success1 = move(height);
+		sprayNozzle << FALSE;
+		
+		change_facing(2); #Head west
+		Boolean success2 = move(1);
+		change_facing(3); #Head south
+		Boolean success3 = move(height);
+		
+		if ((NOT (success1 AND success2 AND success3))) then
+			return FALSE;
+		endif
+	enddo
+}
+
+#Assuming this is a right isosceles triangle
+# with the given side_length as the length of the equal sides 
+function spray_triangular_field(Integer side_length) returns Boolean {
+	Integer i;
+	
+	for i from 1 to side_length do
+		change_facing(1); #Head north
+		sprayNozzle << TRUE;
+		Boolean success1 = move(side_length - i + 1);
+		sprayNozzle << FALSE;
+		
+		change_facing(2); #Head west
+		Boolean success2 = move(1);
+		change_facing(3); #Head south
+		Boolean success3 = move(side_length - i + 1);
+		
+		if ((NOT (success1 AND success2 AND success3))) then
+			return FALSE;
+		endif
+	enddo
+}
+
+#Make the altitude between 5 and 10 meters
+function correct_altitude() {
+  Double currAltitude;
+	readAltitude >> currAltitude;
+
+	if (currAltitude LT 5) then
+	#Move the drone vertically up until altitude is at least 5 meters
+	verticalMove; #By default, starts moving with speed 0.1 mt/s to up
+
+	#Check the altitude every tenth of a second
+	while (currAltitude LT 5) do 
+		wait << 10; #Wait 10 milliseconds
+		readAltitude >> currAltitude;
+	enddo   
+
+	elseif (currAltitude GT 10) then
+		verticalMove << -0.1;
+
+		#Move the drone vertically down until altitude is at most 10 meters
+		while (currAltitude GT 10) do 
+			wait << 10;
+			readAltitude >> currAltitude;
+		enddo 
+	endif
+	verticalMove << 0;
+}
+
+function main () {
+	Integer droneId;
+	out << "Select the drone id";
+	in >> droneId;
+	connectBaseComputer << droneId;
+  
+	Integer areaType;
+	out << "Enter 1 for rectangular area, 2 for triangular area";
+	in >> areaType;
+    
+	correct_altitude();
+ 
+	Boolean success;
+	if (areaType EQUALS 1) then
+	Integer width;
+	Integer height;
+	out << "Enter width and height";
+	in >> width;
+	in >> height;
+  
+	success = spray_rectangular_field(width, height);
+	elseif (areaType EQUALS 2) then
+		Integer side_length;
+		out << "Enter side length";
+		in >> side_length;
+    
+ 		success = spray_triangular_field(side_length);
+	else
+		success = false;
+	endif
+  
+  
+	if (success) then
+		out << "Spraying is successful!";
+	else
+		out << "Spraying is not successful!";
+	endif
+} 

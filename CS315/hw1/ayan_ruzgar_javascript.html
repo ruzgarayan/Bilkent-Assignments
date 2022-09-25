@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+ 
+
+<script>
+
+
+console.log("Question 1. What types are legal for subscripts?");
+array = [1,2,3,4,5];
+console.log("array[1]:", array[1]); //Prints 2
+
+another_array = [10,11];
+object = {name: "Ruzgar", surname: "Ayan"};
+console.log("array[1.2]:", array[1.2]); //Prints undefined
+console.log("array['abc']:", array["abc"]); //Prints undefined
+console.log("array[another_array]:", array[another_array]); //Prints undefined
+console.log("array[object]:", array[object]); //Prints undefined
+
+array[true] = "Boolean index";
+array[1.2] = "Double index";
+array["abc"] = "String index";
+array[another_array] = "Array index";
+array[object] = "Object index";
+console.log("Final state of the array", array);
+console.log("Final length of the array", array.length);
+
+console.log("Question 2. Are subscripting expressions in element references range checked?");
+array = [1,2,3,4,5];
+console.log("array[array.length]:", array[array.length]); //Does not give error but gives undefined
+console.log("array[-1]:", array[-1]); //Does not give error but gives undefined
+
+
+console.log("Question 3. When are subscript ranges bound?");
+console.log("array[5]:", array[5]); //Gives undefined now
+array.push(6);
+console.log("array[5]:", array[5]); //Gives the new value now, subscript range is dynamically changed
+
+
+console.log("Question 4. When does allocation take place?");
+
+
+
+console.log("Question 5. Are ragged or rectangular multidimensional arrays allowed, or both?");
+ragged = [[1,2],[3,4,5]];
+rectangular = [[1,2],[3,4]];
+console.log("ragged: ", ragged);
+console.log("rectangular: ", rectangular);
+
+
+console.log("Question 6. Can array objects be initialized?");
+initialized_arr = [1,2,3];
+initialized_arr2 = Array(100).fill("element"); // Array of 100 "element"s
+console.log("initialized_arr: ", initialized_arr);
+console.log("initialized_arr2: ", initialized_arr2);
+
+console.log("Question 7. Are any kind of slices supported?");
+console.log("array: ", array);
+console.log("array.slice(2,4): ", array.slice(2,4));
+
+//Gives ReferenceError: Invalid left-hand side in assignment
+//Cannot change after using the slice method
+//array.slice(2,4) = [13,14];
+
+//splice is used to modify slices
+array.splice(2,2, "New element 1", "New element 2");
+console.log("array after splice: ", array);
+
+console.log("Question 8. Which operators are provided?");
+[a,b] = [123,456];
+console.log("a =", a, ", b =", b);
+console.log("([3,4] + [1,2]): ", ([3,4] + [1,2]));
+console.log("([3,4] * [1,2]): ", ([3,4] * [1,2]));
+
+//Looked at the most common operators from https://dmitripavlutin.com/operations-on-arrays-javascript/
+array = [1,2,3,4]
+console.log("array: ", array);
+
+array.pop();
+console.log("after array.pop(): ", array);
+array.shift();
+console.log("after array.shift(): ", array);
+array.push(10);
+console.log("after array.push(10): ", array);
+
+console.log("[3,4].concat([1,2]): ", [3,4].concat([1,2]));
+
+
+
+
+</script>
+
+ 
+</html>

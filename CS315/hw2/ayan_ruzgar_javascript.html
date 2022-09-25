@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+ 
+
+<script>
+
+//Question 1.
+
+var boolTrue = true;
+var boolFalse = false;
+var negNumber = -1.1;
+var zeroNumber = 0;
+var posNumber = 1.1;
+var emptyString = "";
+var nonemptyString = "abc";
+var emptyArray = [];
+var nonemptyArray = ["abc", 123];
+var emptyObject = {};
+var nonemptyObject = {key: "value"};
+var undefinedVar;
+var nullVar = null;
+
+if (boolTrue) console.log("boolTrue"); //Prints
+if (boolFalse) console.log("boolFalse");
+if (negNumber) console.log("negNumber"); //Prints
+if (zeroNumber) console.log("zeroNumber");
+if (posNumber) console.log("posNumber"); //Prints
+if (emptyString) console.log("emptyString");
+if (nonemptyString) console.log("nonemptyString"); //Prints
+if (emptyArray) console.log("emptyArray"); //Prints
+if (nonemptyArray) console.log("nonemptyArray"); //Prints
+if (emptyObject) console.log("emptyObject"); //Prints
+if (nonemptyObject) console.log("nonemptyObject"); //Prints
+if (undefinedVar) console.log("undefinedVar");
+if (nullVar) console.log("nullVar");
+
+
+//###########################################################
+console.log("\n\n");
+//Question 2.
+function print(input) { 
+    console.log("Printed at " + input + "!"); return 1;
+}
+const and = (false && print("and"));
+const or = (true || print("or"));
+const bitwiseAnd = (0 & print("bitwiseAnd")); //Prints
+const bitwiseOr = (~0 | print("bitwiseOr")); //Prints
+const multiplication = (0 * 5 * print("multiplication")); //Prints
+
+
+
+//###########################################################
+console.log("\n\n");
+//Question 3.
+function print(input) { 
+    console.log("Printed at " + input + "!"); return 1;
+}
+
+//Prints a and b
+const shortcircuit = print("a") && print("b") || print("c");
+//Prints a and b
+const shortcircuit2 = 0 || print("a") && (print("b") || print("c"));
+
+//###########################################################
+console.log("\n\n");
+//Question 4.
+function expensiveComputation() { 
+    var sum = 0;
+    for (var i = 0; i < 10000; i++) sum += i;
+    return sum;
+}
+
+var smallNumber = 1;
+//With short-circuit
+if (smallNumber > 10 && expensiveComputation() > 10000) {
+    console.log("Inside if 1");
+}
+
+//Without short-circuit
+if (smallNumber > 10) {
+    if (expensiveComputation() > 10000) {
+        console.log("Inside if 2");
+    }
+}
+
+//###########################################################
+console.log("\n\n");
+//Question 5.
+function sideEffectComputation() { 
+    globalVariable = "I have been changed";
+    return 1;
+}
+
+var globalVariable = "Initial value";
+const var1 = smallNumber > 10 && sideEffectComputation();
+console.log(globalVariable); //Prints "Initial Value"
+const var2 =  sideEffectComputation() && smallNumber > 10;
+console.log(globalVariable); //Prints "I have been changed"
+
+</script>
+
+ 
+</html>

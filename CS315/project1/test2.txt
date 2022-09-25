@@ -1,0 +1,20 @@
+#Test program for trying expressions and boolean operators, also compound numerical and logical expressions
+
+#Note: There was no meaningful way of trying these compound expressions with the drone operations
+#So this test program is not meaningful but still written to cover all the language structs
+
+function numericalOperations (Integer a , Integer b) returns Integer {
+	return (a - b * a - b / (a % b));
+}
+
+function logicalOperations (Integer a , Integer b, Boolean c) returns Boolean {
+	if (c) then
+		return ((a GTEQ b) OR NOT(numericalOperations(a, b) NEQUALS (a + b)));
+	else
+		return (NOT(c));
+	endif
+}
+
+function main () {
+	out << logicalOperations(10 + 1, 23 % 9, 23 GT (10+12));
+} 

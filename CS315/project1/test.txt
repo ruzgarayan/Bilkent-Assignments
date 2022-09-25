@@ -1,0 +1,80 @@
+#Test program for moving drones
+
+#Function for moving the drone to north direction for the given amount of milliseconds with the given speed 
+function spray_moving_north(Double time, Integer speed) returns Boolean {
+  Double currAltitude;
+  readAltitude >> currAltitude;
+  
+  if (currAltitude LT 5) then
+    #Move the drone vertically up until altitude is at least 5 meters
+    verticalMove; #By default, starts moving with speed 0.1 mt/s to up
+    
+    #Check the altitude every tenth of a second
+    while (currAltitude LT 5) do 
+      wait << 10; //Wait 10 milliseconds
+      readAltitude >> currAltitude;
+    enddo   
+    
+  else
+	#Nested if statement
+    if (currAltitude GT 10) then
+      verticalMove << -0.1;
+       
+      #Move the drone vertically down until altitude is at most 10 meters
+      while (currAltitude GT 10) do 
+        wait << 10;
+        readAltitude >> currAltitude;
+      enddo 
+    endif
+  endif
+  verticalMove << 0; 
+  
+  Integer currHeading;
+  readHeading >> currHeading;
+  
+  #Set the heading of drone to 0 so it is directed to north
+  turnLeft << currHeading;
+  
+  #Check if the given speed is acceptable
+  if (speed GT 10) then
+    return FALSE;
+  else
+    #Set horizontal speed
+    horizontalMove << speed;
+  endif
+  
+  #Turn on the spray nozzle
+  sprayNozzle << TRUE;
+  
+  wait << time;
+  
+  #Turn off the spray nozzle and stop the horizontal move
+  sprayNozzle << false;
+  horizontalMove << 0;
+  
+  return TRUE;
+}
+
+function main () {
+  Integer speed;
+  Double time;
+  
+  Integer droneId;
+  Boolean result;
+  
+  Integer numQueries = 10;
+  Integer i;
+  for i from 1 to numQueries do
+    in >> droneId;
+    
+	#Only do the operations if the input droneId is between 0-1000 or if it is exactly 2500.
+	#Because only these droneIds are valid for this application.
+	if (((droneId GTEQ 0) AND (droneId LTEQ 1000)) OR (droneId EQUALS 2500)) then
+	
+		connectBaseComputer << droneId; #Connect the base computer to the drone with <droneId>
+		result = spray_moving_north (i * 10.0 , 10.0 / i);
+		out << "The result is: ";
+		out << result;
+	endif
+  enddo
+} 

@@ -1,0 +1,19 @@
+#Test program for trying expressions and boolean operators, also compound numerical and logical expressions
+
+function numericalOperations (Integer a , Integer b) returns Integer {
+	return a - b * a - b / a % b;
+}
+
+function logicalOperations (Integer a , Integer b, Boolean c) returns Boolean {
+  Integer result = numericalOperations(a, b);
+	if (c) then
+		return ((a GTEQ b) OR (NOT (result NEQUALS a + b)));
+	else
+		return ((NOT c));
+	endif
+}
+
+function main () {
+	out << logicalOperations(10 + 1, 23 % 9, TRUE);
+	out << (5.22 + 4.88 EQUALS 10.00);
+} 
